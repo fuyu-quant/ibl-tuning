@@ -13,7 +13,7 @@ def jinja_rendering(processing):
     return code_model
 
 
-def pseudo_data(num_rows = 100):
+def pseudo_data(num_rows):
 
     df = pd.DataFrame({
         'A': np.random.randint(0, 21, size=num_rows),
@@ -22,9 +22,9 @@ def pseudo_data(num_rows = 100):
     })
     return df
 
-def data_to_string(processing):
+def data_to_string(processing, num_rows):
     code_model = jinja_rendering(processing)
-    df = pseudo_data()
+    df = pseudo_data(num_rows)
     local_vars = {}
     exec(code_model, globals(), local_vars)
     df['y'] = local_vars['predict'](df)
