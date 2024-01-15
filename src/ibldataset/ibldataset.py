@@ -1,5 +1,6 @@
 from .codemodel.branchlinear import branchlinear_model
 from .codemodel.branch import branch_model
+from .codemodel.branch_easy import branch_easy_model
 from .codemodel.linear import linear_model
 from .psuedodata import data_to_string
 import json
@@ -17,8 +18,10 @@ def make_dataset(num_data, mode, num_rows):
             processing = linear_model()
         elif mode == 'branch':
             processing = branch_model()
+        elif mode == 'branch_easy':
+            processing = branch_easy_model()
         elif mode == 'all':
-            functions = [branchlinear_model, linear_model, branch_model]
+            functions = [branchlinear_model, linear_model, branch_model, branch_easy_model]
             selected_function = random.choice(functions)
             processing = selected_function()
 
