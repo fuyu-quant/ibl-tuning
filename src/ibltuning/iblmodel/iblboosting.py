@@ -14,7 +14,7 @@ def ibl_output(model, tokenizer, input):
             max_new_tokens=100
             )
     output = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    output = output.split("### Response: ")[-1]
+    output = output.split("### Response:  ")[-1]
     return output
 
 def str_to_df(data_str):
@@ -25,15 +25,17 @@ def str_to_df(data_str):
     return df
 
 def code_model_pred(df, code_model):
+    y = df['y']
     df = df.drop(['y'], axis=1)
     local_vars = {}
     exec(code_model, globals(), local_vars)
-    df['y'] = local_vars['predict'](df)
+    pred_y = local_vars['predict'](df)
+    df['y'] = y - pred_y
     return df
 
 
 
-def ibl_boosting(model, tokenizer, input, num_boost_round):
+def run(model, tokenizer, input, num_boost_round):
 
     code_list = []
 
@@ -44,5 +46,6 @@ def ibl_boosting(model, tokenizer, input, num_boost_round):
         df = str_to_df(input)
         code_model = jinja_rendering(code)
         pred_df = code_model_pred(df, code_model)
+        print(pred_df)
         input = pred_df.to_string(index=False)
     return code_list
