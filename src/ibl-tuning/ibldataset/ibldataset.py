@@ -2,7 +2,7 @@ from .codemodel.branchlinear import branchlinear_model
 from .codemodel.branch import branch_model
 from .codemodel.branch_easy import branch_easy_model
 from .codemodel.linear import linear_model
-from .psuedodata import data_to_string
+from .psuedodata import df_to_string
 import json
 from datasets import load_dataset, DatasetDict
 import os
@@ -25,9 +25,7 @@ def make_dataset(num_data, mode, num_rows):
             selected_function = random.choice(functions)
             processing = selected_function()
 
-
-
-        str_data = data_to_string(processing, num_rows)
+        str_data = df_to_string(processing, num_rows)
         data = {}
         data['instruction'] = str_data
         data['output'] = processing

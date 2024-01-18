@@ -1,10 +1,9 @@
 [tool.poetry]
-name = "ibl-dataset"
+name = "ibl-tuning"
 version = "0.1.0"
 description = ""
 authors = ["toma tanaka <ulti4929@gmail.com>"]
 readme = "README.md"
-packages = [{include = "ibl_dataset"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"

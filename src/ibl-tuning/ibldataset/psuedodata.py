@@ -1,17 +1,6 @@
 import pandas as pd
 import numpy as np
-from jinja2 import Environment, FileSystemLoader
-
-
-def jinja_rendering(processing):
-    env = Environment(
-        loader=FileSystemLoader('/Users/tanakatouma/vscode/ibl-dataset/src/ibldataset')
-        )
-    template = env.get_template('template.txt')
-    data = {'processing': processing}
-    code_model = template.render(data)
-    return code_model
-
+from ..utils.utils import jinja_rendering
 
 def pseudo_data(num_rows):
 
@@ -22,7 +11,7 @@ def pseudo_data(num_rows):
     })
     return df
 
-def data_to_string(processing, num_rows):
+def df_to_string(processing, num_rows):
     code_model = jinja_rendering(processing)
     df = pseudo_data(num_rows)
     local_vars = {}
