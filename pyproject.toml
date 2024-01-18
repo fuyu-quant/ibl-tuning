@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ibl-tuning"
+name = "ibltuning"
 version = "0.1.0"
 description = ""
 authors = ["toma tanaka <ulti4929@gmail.com>"]
