@@ -41,11 +41,9 @@ def run(model, tokenizer, input, num_boost_round):
 
     for _ in range(num_boost_round):
         code = ibl_output(model, tokenizer, input)
-        print(code)
         code_list.append(code)
         df = str_to_df(input)
         code_model = jinja_rendering(code)
         pred_df = code_model_pred(df, code_model)
-        print(pred_df)
         input = pred_df.to_string(index=False)
     return code_list
