@@ -1,6 +1,5 @@
 import random
 
-
 def make_if_statement(processing):
     feature_list = ['A', 'B', 'C']
     select_feature1 = random.choice(feature_list)
