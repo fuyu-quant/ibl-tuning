@@ -1,56 +1,29 @@
 import random
-
-def make_if_statement(processing):
-    feature_list = ['A', 'B', 'C']
-    select_feature1 = random.choice(feature_list)
-    if_figure = random.randint(0, 20)
-    processing += f'if row["{select_feature1}"] < {if_figure}:\n'
-    coef = random.randint(0, 10)
-    select_feature2 = random.choice(feature_list)
-    processing += f'    y = {coef}*row["{select_feature2}"]\n'
-    return processing
+from ..psuedodata import df_to_string
 
 
-def make_elif_statement(processing):
-    feature_list = ['A', 'B', 'C']
-    select_feature1 = random.choice(feature_list)
-    if_figure = random.randint(0, 20)
-    processing += f'elif row["{select_feature1}"] < {if_figure}:\n'
-    coef = random.randint(0, 10)
-    select_feature2 = random.choice(feature_list)
-    processing += f'    y = {coef}*row["{select_feature2}"]\n'
-    return processing
-
-
-def make_else_statement(processing):
-    feature_list = ['A', 'B', 'C']
-    processing += 'else:\n'
-    coef = random.randint(0, 10)
-    select_feature = random.choice(feature_list)
-    processing += f'    y = {coef}*row["{select_feature}"]\n'
-    return processing
-
-
-def branch_model():
+def _make_processing():
     processing = ''
+    branch_a = random.randint(10, 20)
+    branch_b = random.randint(10, 20)
+    branch_c = random.randint(10, 20)
+    y_1 = random.randint(1, 30)
+    y_2 = random.randint(1, 30)
+    y_3 = random.randint(1, 30)
+    y_4 = random.randint(1, 30)
+    processing += f'if row["A"] < {branch_a}:\n'
+    processing += f'    y = {y_1}\n'
+    processing += f'elif row["B"] < {branch_b}:\n'
+    processing += f'    y = {y_2}\n'
+    processing += f'elif row["C"] < {branch_c}:\n'
+    processing += f'    y = {y_3}\n'
+    processing += 'else:\n'
+    processing += f'    y = {y_4}'
+    return processing
 
-    # if文の数
-    num_if = random.randint(1, 3)
 
-    if num_if == 1:
-        processing = make_if_statement(processing)
-        processing = make_else_statement(processing)
-        return processing
+def branch_dataset(num_rows):
+    processing = _make_processing()
+    str_data = df_to_string(processing, num_rows)
 
-    elif num_if == 2:
-        processing = make_if_statement(processing)
-        processing = make_elif_statement(processing)
-        processing = make_else_statement(processing)
-        return processing
-
-    elif num_if == 3:
-        processing = make_if_statement(processing)
-        processing = make_elif_statement(processing)
-        processing = make_elif_statement(processing)
-        processing = make_else_statement(processing)
-        return processing
+    return processing, str_data

@@ -2,7 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 import importlib.resources as pkg_resources
 
 def jinja_rendering(processing):
-    with pkg_resources.path('ibltuning.utils', 'code_model.txt') as template_path:
+    with pkg_resources.path('src.ibltuning.utils', 'code_model.txt') as template_path:
         env = Environment(loader=FileSystemLoader(template_path.parent))
         template = env.get_template('code_model.txt')
 
