@@ -1,5 +1,5 @@
 import json
-from datasets import load_dataset, DatasetDict
+from datasets import load_dataset, DatasetDict, concatenate_datasets
 import os
 import random
 from tqdm import tqdm
@@ -8,7 +8,7 @@ from .codemodel.restrict_branch import restrict_branch_dataset
 from .codemodel.branch import branch_dataset
 from .codemodel.linear import linear_dataset
 
-def _make_dataset(num_data, mode, num_rows, generated_coefficients):
+def _make_dataset(num_data, mode, num_rows):
     dataset = []
 
     for j in tqdm(range(num_data)):
@@ -19,7 +19,7 @@ def _make_dataset(num_data, mode, num_rows, generated_coefficients):
         elif mode == 'branch':
             processing, str_data = branch_dataset(num_rows)
         elif mode == 'restrict_branch':
-            processing, str_data,  = restrict_branch_dataset(num_rows, generated_coefficients)
+            processing, str_data,  = restrict_branch_dataset(num_rows)
 
 
         data = {}
@@ -41,9 +41,9 @@ def _preserve(dataset, path):
 
 
 def execution(train_num, test_num, num_rows, mode, dataset_prefix):
-    generated_coefficients = set()
-    train_dataset = _make_dataset(train_num, mode, num_rows, generated_coefficients)
-    test_dataset = _make_dataset(test_num, mode, num_rows, generated_coefficients)
+    #generated_coefficients = set()
+    train_dataset = _make_dataset(train_num, mode, num_rows)
+    test_dataset = _make_dataset(test_num, mode, num_rows)
     dataset_name = f'{dataset_prefix}-{mode}'
     directory = f"../data/{dataset_name}"
     os.makedirs(directory, exist_ok=True)
@@ -58,12 +58,23 @@ def execution(train_num, test_num, num_rows, mode, dataset_prefix):
     return train_path, test_path, dataset_name
 
 
-def upload(train_path, test_path, dataset_name):
+def uploader(train_path, test_path, dataset_name):
     train_dataset = load_dataset("json", data_files = train_path)
     test_dataset = load_dataset("json", data_files = test_path)
     dataset_dict = DatasetDict({
         'train': train_dataset['train'],
         'test': test_dataset['train']
         })
+    dataset_dict.push_to_hub(f"fuyu-quant/{dataset_name}")
+    return
+
+
+def concatdata_uploader(data1_path, data2_path, dataset_name):
+    data1_dataset = load_dataset("json", data_files=data1_path)
+    data2_dataset = load_dataset("json", data_files=data2_path)
+    combined_dataset = concatenate_datasets([data1_dataset["train"], data2_dataset["train"]])
+
+    dataset_dict = combined_dataset.shuffle()
+    #dataset_dict = DatasetDict({'train': shuffled_dataset['train']})
     dataset_dict.push_to_hub(f"fuyu-quant/{dataset_name}")
     return
